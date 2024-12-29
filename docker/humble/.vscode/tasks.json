@@ -1,0 +1,30 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "shell",
+      "command": "./.vscode/build.sh",
+      "args": [],
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "label": "cb: colcon build",
+      "presentation": {
+        "revealProblems": "onProblem",
+        "close": true
+      }
+    },
+    {
+      "label": "Install VSCode Extensions in Devcontainer",
+      "type": "shell",
+      "command": "../install_vscode_extensions.bash",
+      "problemMatcher": [],
+      "presentation": {
+        "revealProblems": "onProblem",
+        "close": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+CompileFlags:
+  Add: [-D__cpp_concepts=202002L]
+
+InlayHints:
+  Enabled: Yes
+  BlockEnd: No
+  ParameterNames: Yes # function parameter names
+  DeducedTypes: Yes # type of auto
+  Designators: Yes # array index
+  TypeNameLimit: 24

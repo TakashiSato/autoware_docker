@@ -1,0 +1,23 @@
+# common environment variables
+export TZ=Asia/Tokyo
+export QT_X11_NO_MITSHM=1
+
+# avoid warning
+export XDG_RUNTIME_DIR=/tmp/runtime-ubuntu
+
+# avoid library missing
+export LIBRARY_PATH=/usr/local/lib:$LIBRARY_PATH
+export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+
+# completion
+source /etc/bash_completion
+
+# use ccache to reduce compile time
+export CC="/usr/lib/ccache/gcc"
+export CXX="/usr/lib/ccache/g++"
+
+# save multi-line commands in history
+# ref.: https://askubuntu.com/questions/1133015/multiline-command-chunks-in-bash-history-into-multiple-lines
+shopt -s cmdhist
+shopt -s lithist
+HISTTIMEFORMAT='%F %T '

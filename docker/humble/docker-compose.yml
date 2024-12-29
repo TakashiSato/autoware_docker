@@ -1,0 +1,84 @@
+---
+services:
+  aw:
+    image: autoware:dev
+    build:
+      context: ../
+      dockerfile: ./humble/Dockerfile
+      args:
+        PUID: ${PUID:-1000}
+        PGID: ${PGID:-1000}
+        USERNAME: ${CONTAINER_USER} 
+    container_name: aw
+    stdin_open: true
+    tty: true
+    init: true
+    user: ${CONTAINER_USER}
+    environment:
+      - DISPLAY=${DISPLAY}
+      - SSH_AUTH_SOCK=/ssh-auth-sock
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ${SSH_AUTH_SOCK}:/ssh-auth-sock
+      - ${HOME}/.ssh:/home/${CONTAINER_USER}/.ssh
+      - bash_history:/commandhistory
+      - user_config:/home/${CONTAINER_USER}/.config
+      - ros2_log:/home/${CONTAINER_USER}/.ros/log
+      - ccache:/home/${CONTAINER_USER}/.cache/ccache
+      - vscode_server:/home/${CONTAINER_USER}/.vscode-server
+      - colcon_ws_build:/home/${CONTAINER_USER}/colcon_ws/build
+      - colcon_ws_install:/home/${CONTAINER_USER}/colcon_ws/install
+      - colcon_ws_log:/home/${CONTAINER_USER}/colcon_ws/log
+      - clangd_cache:/home/${CONTAINER_USER}/colcon_ws/.cache
+      - type: bind
+        source: ${ROS_WS}/src
+        target: /home/${CONTAINER_USER}/colcon_ws/src
+      - type: bind
+        source: ./.vscode
+        target: /home/${CONTAINER_USER}/colcon_ws/.vscode
+      - type: bind
+        source: ./.clangd
+        target: /home/${CONTAINER_USER}/colcon_ws/.clangd
+      - type: bind
+        source: ../common/.clang-format
+        target: /home/${CONTAINER_USER}/colcon_ws/.clang-format
+      - type: bind
+        source: ../common/install_vscode_extensions.bash
+        target: /home/${CONTAINER_USER}/install_vscode_extensions.bash
+      - type: bind
+        source: ../common/ros_entrypoint.bash
+        target: /ros_entrypoint.bash
+      - type: bind
+        source: ../common/.rosrc
+        target: /home/${CONTAINER_USER}/.rosrc
+      - type: bind
+        source: ../common/cyclonedds.xml
+        target: /home/${CONTAINER_USER}/cyclonedds.xml
+    cap_add:
+      - NET_ADMIN   # to enable multicast on loopback interface
+    ports:
+      - "9090:9090"    # rosbridge_websocket
+      - "8765:8765"    # foxglove_bridge
+    entrypoint: ["bash", "-c", "/ros_entrypoint.bash"]
+    # privileged: true
+    network_mode: "bridge"
+
+volumes:
+  bash_history:
+    driver: local
+  colcon_ws_build:
+    driver: local
+  colcon_ws_install:
+    driver: local
+  colcon_ws_log:
+    driver: local
+  clangd_cache:
+    driver: local
+  user_config:
+    driver: local
+  ros2_log:
+    driver: local
+  ccache:
+    driver: local
+  vscode_server:
+    driver: local
