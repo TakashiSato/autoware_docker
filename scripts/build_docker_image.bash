@@ -13,4 +13,4 @@ if [ ! -f "${CYCLONEDDS_CONF}" ]; then
   sudo sysctl -w net.core.rmem_max=2147483647 > /dev/null
 fi
 
-docker compose -f ./docker/humble/docker-compose.yml build
+docker compose -f ./docker/humble/docker-compose.yml -f ./docker/humble/build.yml build
